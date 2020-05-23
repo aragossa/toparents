@@ -28,7 +28,7 @@ def text_message_handler(user, message, bot):
         elif 'RESPONSE' in user_state:
             sender_id = user_state.split('_')[1]
             request_id = user_state.split('_')[2]
-            send_text = ('{}\n\n{}'.format(message.text, user.get_username(user.uid)))
+            send_text = ('Ответ от {}\n\n{}'.format(user.get_username(user.uid), message.text))
             user.send_message(chat_id=sender_id, text=send_text)
             user.request_update_staus(request_id=request_id, new_staus='FIN', resposne_text=send_text)
             result_query = user.get_message_ids(request_id)
