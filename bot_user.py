@@ -26,7 +26,6 @@ class Botuser():
         result = Dbconnetor.execute_select_query(
             "SELECT username, first_name, last_name from core.users WHERE user_id = {}".format(
                 uid))
-        print (result)
         if result[1] != 'None':
             return (result[1] + ' ' + result[2])
         else:
