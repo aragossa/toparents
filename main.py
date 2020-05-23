@@ -60,6 +60,17 @@ def test_answer_handler(call):
         user.send_message(message_index="ERROR_MESSAGE")
 
 
+@bot.callback_query_handler(func=lambda call: call.data == 'send_first_post')
+def test_answer_handler(call):
+    user = Botuser(uid=call.message.chat.id, bot=bot)
+    try:
+        starting_helper.first_post_handler(call=call, user=user, bot=bot)
+    except:
+        logging.exception(str(call))
+        logging.exception('Got exception on main handler')
+        user.send_message(message_index="ERROR_MESSAGE")
+
+
 th = threading.Thread(target=notificator.get_active_notifications, args=())
 th.start()
 

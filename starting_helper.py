@@ -1,4 +1,5 @@
 # /usr/bin/python3
+
 from buttons_helper import KeyboardHelper
 
 
@@ -13,7 +14,6 @@ def stating_handler(user, message):
 
 def text_message_handler(user, message, bot):
     user_state = user.getstate()
-    print (user_state)
     if message.text == 'Написать администраторам':
         user.change_user_state ('REQUEST')
         user.send_message(message_index='ENTER_TEXT')
@@ -44,3 +44,7 @@ def reply_to_request_handler(call, user, bot):
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=call.message.text)
     send_text = ('{}\n\nВвежите ответ:'.format(call.message.text))
     bot.send_message(chat_id=call.message.chat.id, text=send_text)
+
+
+def first_post_handler(call, user, bot):
+    user.send_message(message_index='POST_1')

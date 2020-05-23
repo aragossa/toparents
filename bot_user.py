@@ -100,10 +100,6 @@ class Botuser():
 
     def change_user_state(self, user_state):
         query = """
-            UPDATE toparents_bot.user_state_toparents_bot SET user_state = '{1}'
-            WHERE user_id = {0};""".format(self.uid, user_state)
-
-        query = """
         INSERT INTO toparents_bot.user_state_toparents_bot
 	        ( user_id,  user_state )
 	    VALUES
@@ -111,7 +107,6 @@ class Botuser():
 	    ON CONFLICT ON CONSTRAINT pk_user_state_user_id
 	    DO UPDATE SET user_state = '{}';""".format(self.uid, user_state, user_state)
 
-        print (query)
         Dbconnetor.execute_insert_query(query)
 
     def request_update_staus(self, request_id, new_staus, resposne_text):
