@@ -26,10 +26,10 @@ class Botuser():
         result = Dbconnetor.execute_select_query(
             "SELECT username, first_name, last_name from core.users WHERE user_id = {}".format(
                 uid))
-        if result[0] == 'None':
-            return (result[1] + ' ' + result[2])
-        else:
+        if result[1] == 'None':
             return result[0]
+        else:
+            return (result[1] + ' ' + result[2])
 
 
     def get_user_lang(self):
