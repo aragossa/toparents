@@ -8,13 +8,15 @@ def stating_handler(user, message):
     first_name = message.from_user.first_name
     username = message.from_user.username
     user.join_aggrbot(last_name=last_name, first_name=first_name, username=username, ref_key='Notset', lang='rus')
+    keyboard1 = KeyboardHelper.reply_call_back_button(user=user)
+    user.send_message(message_index='WELCOME', keyboard=keyboard1)
     keyboard = KeyboardHelper.first_post_keyboard(user=user)
     user.send_message(message_index='HELLO_MESSAGE', keyboard=keyboard)
 
 
 def text_message_handler(user, message, bot):
     user_state = user.getstate()
-    if message.text == 'Написать администраторам':
+    if message.text == user.select_message ('CONTACT'):
         user.change_user_state ('REQUEST')
         user.send_message(message_index='ENTER_TEXT')
 
@@ -35,8 +37,6 @@ def text_message_handler(user, message, bot):
                 bot.edit_message_text(chat_id=row[1], message_id=row[0], text='Обработано')
 
 
-
-
 def reply_to_request_handler(call, user, bot):
     sender_user = call.data.split('_')[1]
     request_id = call.data.split('_')[2]
@@ -47,4 +47,12 @@ def reply_to_request_handler(call, user, bot):
 
 
 def first_post_handler(call, user, bot):
-    user.send_message(message_index='POST_1')
+    bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=call.message.text)
+    keyboard = KeyboardHelper.inline_call_back_button(user)
+    user.send_message(message_index='POST_1', keyboard=keyboard)
+
+
+def call_back_handler(call, user, bot):
+    bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=call.message.text)
+    user.change_user_state ('REQUEST')
+    user.send_message(message_index='ENTER_TEXT')

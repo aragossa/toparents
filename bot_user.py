@@ -46,9 +46,9 @@ class Botuser():
             chat_id = self.uid
 
         if keyboard:
-            return self.bot.send_message(chat_id=chat_id, text=text, reply_markup=keyboard)
+            return self.bot.send_message(chat_id=chat_id, text=text, reply_markup=keyboard, parse_mode='Markdown')
         else:
-            return self.bot.send_message(chat_id=chat_id, text=text)
+            return self.bot.send_message(chat_id=chat_id, text=text, parse_mode='Markdown')
 
     def send_request(self, request_text):
         admins_list = self.get_admins()
