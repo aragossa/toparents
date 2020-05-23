@@ -26,7 +26,7 @@ class Notificator ():
                 send_text = ('#request\nОТ: {}\n\n{}'.format(sender_username, request_text))
                 for admin in admin_list:
                     user = Botuser(uid=admin, bot=self.bot)
-                    keyboard = KeyboardHelper.reply_tp_user_request_keyboard(user=user, request_id=request_id)
+                    keyboard = KeyboardHelper.reply_to_user_request_keyboard(user=user, sender_id=sender_id, request_id=request_id)
                     sent_message = user.send_message(chat_id=user.uid, text=send_text, keyboard=keyboard)
                     user.save_request_message(request_id=request_id, admin_id=user.uid, message_id=sent_message.message_id)
                     time.sleep(1)

@@ -26,9 +26,9 @@ class KeyboardHelper:
         return keyboard
 
     @staticmethod
-    def reply_tp_user_request_keyboard(user, request_id):
+    def reply_to_user_request_keyboard(user, sender_id, request_id):
         keyboard = types.InlineKeyboardMarkup()
         btn1 = types.InlineKeyboardButton(text=user.select_message('REPLY_TO'),
-                                          callback_data='reply_{}_{}'.format(user.uid, request_id))
+                                          callback_data='reply_{}_{}'.format(sender_id, request_id))
         keyboard.add(btn1)
         return keyboard

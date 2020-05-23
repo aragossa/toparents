@@ -1,7 +1,6 @@
 import datetime
 import uuid
 
-from buttons_helper import KeyboardHelper
 from dbconnector import Dbconnetor
 
 
@@ -50,13 +49,6 @@ class Botuser():
         else:
             return self.bot.send_message(chat_id=chat_id, text=text, parse_mode='Markdown')
 
-    def send_request(self, request_text):
-        admins_list = self.get_admins()
-        request_id = uuid.uuid4()
-        keyboard = KeyboardHelper.reply_tp_user_request_keyboard(self, request_id)
-        for admin in admins_list:
-            self.send_message(chat_id=admin, text=request_text, keyboard=keyboard)
-
     def select_message(self, message_index):
         lang = self.get_user_lang()
         if not lang:
@@ -77,7 +69,6 @@ class Botuser():
 	    DO UPDATE SET aggregator_bot_join_date = current_timestamp;""".format(ref_key, lang, self.uid, last_name,
                                                                               first_name, username))
 
-    #self.save_request_message(request_id=request_id, admin_id=self.uid, message_id=message_id)
     def save_request_message(self, request_id, admin_id, message_id):
         Dbconnetor.execute_insert_query("""
                 INSERT INTO toparents_bot.request_messages (message_id, user_id, request_id, status)
