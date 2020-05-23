@@ -6,8 +6,8 @@ After=network.target
 [Service]
 Type=simple
 User=dozer
-WorkingDirectory=/home/dozer/telegrambots/2parentstgbot/
-ExecStart=/usr/bin/python3 /home/dozer/telegrambots/2parentstgbot/agregator-moc$
+WorkingDirectory=/home/dozer/telegrambots/toparents/
+ExecStart=/usr/bin/python3 /home/dozer/telegrambots/toparents/main.py
 RestartSec=10
 Restart=always
 
