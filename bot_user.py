@@ -18,7 +18,7 @@ class Botuser():
         admins_list = []
         if result:
             for row in result:
-                admins_list.append(row)
+                admins_list.append(row[0])
             return admins_list
 
     @staticmethod
