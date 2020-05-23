@@ -42,7 +42,7 @@ def reply_to_request_handler(call, user, bot):
     request_id = call.data.split('_')[2]
     user.change_user_state('RESPONSE_{}_{}'.format(sender_user, request_id))
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=call.message.text)
-    send_text = ('{}\n\nВвежите ответ:'.format(call.message.text))
+    send_text = ('{}\n\nВведите ответ:'.format(call.message.text))
     bot.send_message(chat_id=call.message.chat.id, text=send_text)
 
 
