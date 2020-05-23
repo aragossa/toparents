@@ -13,7 +13,7 @@ class Botuser():
 
     @staticmethod
     def get_admins():
-        result = Dbconnetor.execute_select_query("""SELECT user_id FROM toparents_bot.bot_admin
+        result = Dbconnetor.execute_select_many_query("""SELECT user_id FROM toparents_bot.bot_admin
                                                            WHERE status = 'ENABLE'""")
         admins_list = []
         if result:
