@@ -1,6 +1,7 @@
 # /usr/bin/python3
 
 from buttons_helper import KeyboardHelper
+import post_helper
 
 
 def stating_handler(user, message):
@@ -14,7 +15,7 @@ def stating_handler(user, message):
     user.send_message(message_index='HELLO_MESSAGE', keyboard=keyboard)
 
 
-def text_message_handler(user, message, bot):
+def text_message_handler(user, message, bot, input_value):
     user_state = user.getstate()
     if message.text == user.select_message ('CONTACT'):
         user.change_user_state ('REQUEST')
@@ -24,6 +25,14 @@ def text_message_handler(user, message, bot):
         if user_state == 'REQUEST':
             user.change_user_state('')
             user.save_request (message_text=message.text)
+
+        elif user_state == 'INPUT_INDEX':
+            user.change_user_state('')
+            post_helper.send_post (user=user, post_index=input_value)
+
+        elif user_state == 'INPUT_INDEX_CUSTOM':
+            user.change_user_state('')
+            post_helper.send_custom_post(user=user, post_index=input_value)
 
         elif 'RESPONSE' in user_state:
             sender_id = user_state.split('_')[1]
@@ -35,6 +44,7 @@ def text_message_handler(user, message, bot):
             user.change_user_state('')
             for row in result_query:
                 bot.edit_message_text(chat_id=row[1], message_id=row[0], text='Обработано')
+
 
 
 def reply_to_request_handler(call, user, bot):
@@ -56,3 +66,14 @@ def call_back_handler(call, user, bot):
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=call.message.text)
     user.change_user_state ('REQUEST')
     user.send_message(message_index='ENTER_TEXT')
+
+
+def user_answer_handler(call, user, bot):
+    data = call.data.split('_')
+    answer = data[1]
+    question_type = data[2]
+    user.save_answer(answer=answer, test_type=question_type)
+    bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=user.select_message('POST$2'), parse_mode='markdown')
+    user.send_message(message_index='THANKS')
+
+

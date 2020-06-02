@@ -32,3 +32,13 @@ class KeyboardHelper:
                                           callback_data='reply_{}_{}'.format(sender_id, request_id))
         keyboard.add(btn1)
         return keyboard
+
+    @staticmethod
+    def yes_no_answers(user, post_index):
+        keyboard = types.InlineKeyboardMarkup()
+        btn1 = types.InlineKeyboardButton(text=user.select_message ('YES_ANSWER'),
+                                          callback_data='answer_yes_{}'.format(post_index))
+        btn2 = types.InlineKeyboardButton(text=user.select_message ('NO_ANSWER'),
+                                          callback_data='answer_no_{}'.format(post_index))
+        keyboard.add(btn1, btn2)
+        return keyboard

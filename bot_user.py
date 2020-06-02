@@ -1,6 +1,8 @@
 import datetime
 import uuid
+import time
 
+from buttons_helper import KeyboardHelper
 from dbconnector import Dbconnetor
 
 
@@ -29,7 +31,6 @@ class Botuser():
             return (result[1] + ' ' + result[2])
         else:
             return result[0]
-
 
     def get_user_lang(self):
         lang = Dbconnetor.execute_select_query(
@@ -115,3 +116,29 @@ class Botuser():
             for row in result:
                 message_list.append(row)
             return message_list
+
+    def send_post_to_users(self, post_index):
+        dbconnector = Dbconnetor()
+        users = dbconnector.execute_select_many_query(
+            "SELECT user_id from core.users WHERE aggregator_bot_join_date IS NOT NULL")
+        post = self.select_message(post_index)
+        for user in users:
+            self.send_message(chat_id=user[0], text=post)
+            time.sleep(1)
+
+    def send_custom_post(self, post_index):
+        users = Dbconnetor.execute_select_many_query(
+            "SELECT user_id from core.users WHERE aggregator_bot_join_date IS NOT NULL")
+        keyboard = KeyboardHelper.yes_no_answers(user=self, post_index=post_index)
+        send_text = self.select_message(post_index)
+        for user in users:
+            self.send_message(chat_id=user[0], text=send_text, keyboard=keyboard)
+
+
+    def save_answer(self, answer, test_type):
+        Dbconnetor.execute_insert_query("""
+                INSERT INTO
+                    toparents_bot.user_answers (user_id, answer, status, question_num, post_type)
+	            VALUES ({}, '{}', 'ACTIVE', 1 , '{}');""".format(
+            self.uid, answer, test_type))
+
