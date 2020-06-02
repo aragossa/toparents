@@ -2,6 +2,8 @@ import datetime
 import uuid
 import time
 
+import telebot
+
 from buttons_helper import KeyboardHelper
 from dbconnector import Dbconnetor
 
@@ -45,10 +47,13 @@ class Botuser():
         if not chat_id:
             chat_id = self.uid
 
-        if keyboard:
-            return self.bot.send_message(chat_id=chat_id, text=text, reply_markup=keyboard, parse_mode='Markdown')
-        else:
-            return self.bot.send_message(chat_id=chat_id, text=text, parse_mode='Markdown')
+        try:
+            if keyboard:
+                return self.bot.send_message(chat_id=chat_id, text=text, reply_markup=keyboard, parse_mode='Markdown')
+            else:
+                return self.bot.send_message(chat_id=chat_id, text=text, parse_mode='Markdown')
+        except telebot.apihelper.ApiException:
+            pass
 
     def select_message(self, message_index):
         lang = self.get_user_lang()
