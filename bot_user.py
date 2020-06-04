@@ -53,7 +53,8 @@ class Botuser():
             else:
                 return self.bot.send_message(chat_id=chat_id, text=text, parse_mode='Markdown')
         except telebot.apihelper.ApiException:
-            pass
+            Dbconnetor.execute_insert_query("""UPDATE core.users SET aggregator_bot_block_date = '{}' WHERE user_id = '{}'
+                                            """.format(datetime.datetime.now(), chat_id))
 
     def select_message(self, message_index):
         lang = self.get_user_lang()
@@ -125,7 +126,7 @@ class Botuser():
     def send_post_to_users(self, post_index):
         dbconnector = Dbconnetor()
         users = dbconnector.execute_select_many_query(
-            "SELECT user_id from core.users WHERE aggregator_bot_join_date IS NOT NULL")
+            "SELECT user_id from core.users WHERE aggregator_bot_join_date IS NOT NULL AND aggregator_bot_block_date IS NULL")
         post = self.select_message(post_index)
         for user in users:
             self.send_message(chat_id=user[0], text=post)

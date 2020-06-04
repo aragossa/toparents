@@ -1,7 +1,11 @@
 # /usr/bin/python3
+import datetime
+
+import telebot
 
 from buttons_helper import KeyboardHelper
 import post_helper
+from dbconnector import Dbconnetor
 
 
 def stating_handler(user, message):
@@ -53,7 +57,11 @@ def reply_to_request_handler(call, user, bot):
     user.change_user_state('RESPONSE_{}_{}'.format(sender_user, request_id))
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=call.message.text)
     send_text = ('{}\n\nВведите ответ:'.format(call.message.text))
-    bot.send_message(chat_id=call.message.chat.id, text=send_text)
+    try:
+        bot.send_message(chat_id=call.message.chat.id, text=send_text)
+    except telebot.apihelper.ApiException:
+        Dbconnetor.execute_insert_query("""UPDATE core.users SET aggregator_bot_block_date = '{}' WHERE user_id = '{}'
+                                            """.format(datetime.datetime.now(), call.message.chat.id))
 
 
 def first_post_handler(call, user, bot):
